@@ -2,14 +2,14 @@ import { useState, useCallback } from 'react';
 
 // 语音播报工具函数 - 使用浏览器 Web Speech API (离线可用)
 // 在 Chrome 中即使离线也能正常发音
-export function speak(text, rate = 0.9) {
+export function speak(text, rate = 0.45) {
   if (!window.speechSynthesis) return;
   // 取消当前正在播报的语音
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'en-US';
-  utterance.rate = rate;  // 儿童语速可以稍慢
-  utterance.pitch = 1.1;  // 音调稍高, 更适合儿童
+  utterance.rate = rate;  // 儿童语速很慢,适合3岁宝宝
+  utterance.pitch = 1.3;  // 音调更高, 更适合儿童
   utterance.volume = 1;
   window.speechSynthesis.speak(utterance);
 }
@@ -28,14 +28,14 @@ export function ensureSpeech() {
 // 自定义 Hook: 点击卡片时播放语音
 export function useSpeakOnTap() {
   const [speaking, setSpeaking] = useState(false);
-  const handleSpeak = useCallback((text, rate = 0.85) => {
+  const handleSpeak = useCallback((text, rate = 0.45) => {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     setSpeaking(true);
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = rate;
-    utterance.pitch = 1.15;
+    utterance.pitch = 1.3;
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
     window.speechSynthesis.speak(utterance);
